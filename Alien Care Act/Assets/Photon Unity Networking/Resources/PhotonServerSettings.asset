@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
+  m_Name: PhotonServerSettings
+  m_EditorClassIdentifier: 
+  AppID: 278b6220-412e-427f-98c4-7c0fe6f4e681
+  VoiceAppID: 
+  ChatAppID: 
+  HostType: 1
+  PreferredRegion: 7
+  EnabledRegions: -1
+  Protocol: 0
+  ServerAddress: 
+  ServerPort: 5055
+  VoiceServerPort: 5055
+  JoinLobby: 0
+  EnableLobbyStatistics: 0
+  PunLogging: 0
+  NetworkLogging: 1
+  RunInBackground: 1
+  RpcList:
+  - Chat
+  - DestroyRpc
+  - InstantiateRpc
+  - PickupItemInit
+  - PunPickup
+  - PunPickupSimple
+  - PunRespawn
+  - RequestForPickupItems
+  - RequestForPickupTimes
+  - OnMasterClientLeavingRoom
+  - RPCRequestHostClass
+  - RPCSetHostClassInClient
+  - RPCStartGame
+  - RPCRequestClientClass
+  - RPCSetClientClassInHost
+  - RPCSetClientReady
+  - RPCSetHostReady
+  - OnQuitInGame
+  - RPCSetClientUnready
+  - RPCSetHostUnready
+  - OnClientLeavingRoom
+  - OnPlayerDied
+  - OnPlayerRespawn
+  - KillEnemy
+  - SetScraps
+  - DestroyGameObject
+  - DisableBuilding
+  - EnableBuilding
+  - Shoot
+  - Repair
+  - ShootAtTarget
+  - CallEndGame
+  DisableAutoOpenWizard: 1
