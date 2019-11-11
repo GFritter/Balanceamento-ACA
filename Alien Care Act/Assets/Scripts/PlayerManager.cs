@@ -28,6 +28,8 @@ public class PlayerManager : MonoBehaviour
         if(pClass == "Engineer")
         {
             player_class = 0;
+
+            //acho que o problema é aqui
         }
         else
         {

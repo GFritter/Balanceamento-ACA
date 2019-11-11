@@ -7,6 +7,7 @@ public class TumorLife : MonoBehaviour
 {
     [SerializeField]
     private float health = 10000;
+    [SerializeField]
     private float MaxHealth = 10000;
 
     public GameObject healthBar;

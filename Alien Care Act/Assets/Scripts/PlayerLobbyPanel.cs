@@ -11,6 +11,7 @@ public class PlayerLobbyPanel : MonoBehaviour
 
     public void SetClass(string p_class)
     {
+        Debug.Log("Minha classe eh: " + p_class);
         player_class.text = p_class;
     }
 

@@ -15,10 +15,10 @@ public class EndGameManager : MonoBehaviour
 
     private void Update()
     {
-        if (tumor_parent.transform.childCount == 0)
-        {
-            EndGame(true);
-        }
+        //if (tumor_parent.transform.childCount == 0)
+        //{
+        //    EndGame(true);
+        //}
     }
 
     public void EndGame(bool win)

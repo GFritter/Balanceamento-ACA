@@ -101,7 +101,8 @@ public class lobbyManager : MonoBehaviour
     [PunRPC]
     public void RPCSetClientClassInHost(string client_class)
     {
-        client.SetClass(client_class);
+        Debug.Log("Minha classe eh: " + client_class);
+        client.SetClass(client_class);  
     }
 
     public void OnJoinRoom(string player_name, string selected_char)

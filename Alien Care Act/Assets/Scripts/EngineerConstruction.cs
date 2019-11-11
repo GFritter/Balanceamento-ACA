@@ -100,6 +100,7 @@ public class EngineerConstruction : MonoBehaviour
         if (eManager.BuyBuilding(construction.GetComponent<BuildingProperties>().GetValue()))
         {
             whereToBuild.tag = construction.tag;
+            Debug.Log("TO CONSTRUINDO ESSA MERDA");
             PhotonNetwork.Instantiate(construction.name, whereToBuild.transform.position, whereToBuild.transform.rotation, 0);
         }
     }
@@ -117,7 +118,7 @@ public class EngineerConstruction : MonoBehaviour
         {
             foreach (Collider2D c in col)
             {
-                if (c.tag == "Buildable" && eManager.GetScraps()<=200)
+                if (c.tag == "Buildable" && eManager.GetScraps()<= selectedConstruction.GetComponent<BuildingProperties>().GetValue())
                 {
                     buildablePlaceIndicator.GetComponent<SpriteRenderer>().color = Color.red;
                     buildablePlaceIndicator.transform.position = c.gameObject.transform.position;

@@ -13,12 +13,6 @@ public class NexusManager : MonoBehaviour
         egManager = GameObject.Find("LevelManager").GetComponent<EndGameManager>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ApplyDamage(float damage)
     {
         if (PhotonNetwork.isMasterClient)
