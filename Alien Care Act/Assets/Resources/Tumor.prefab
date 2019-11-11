@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 151407ef1b74cc04e8d5d8ce135dce8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10000
+  health: 5000
   healthBar: {fileID: 1817591271782405583}
 --- !u!58 &8034896407296579873
 CircleCollider2D:

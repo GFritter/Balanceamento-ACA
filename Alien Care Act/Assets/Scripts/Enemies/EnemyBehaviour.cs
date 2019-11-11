@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-enum mode {idle, roaming, approaching, attacking };
+enum mode { idle, roaming, approaching, attacking };
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class EnemyBehaviour : MonoBehaviour
     private photonHandler pHandler;
 
     private EnemyManager enemyMgr;
-    
+
     public Collider2D aggroRange;
     public int damageAmount = 5;
 
@@ -36,6 +36,12 @@ public class EnemyBehaviour : MonoBehaviour
     GameObject Target = null;
 
     GameObject Nexus;
+
+    [SerializeField]
+    mode status;
+
+    
+    public I_EBehaviour behaviour;
 
     private bool stop;
     private bool knocking;
@@ -55,6 +61,8 @@ public class EnemyBehaviour : MonoBehaviour
         Nexus = GameObject.Find("map_holder").transform.Find("Nexus").gameObject;
 
         colliders = new Collider2D[25];
+
+        status = mode.idle;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -64,7 +72,7 @@ public class EnemyBehaviour : MonoBehaviour
             PossibleTargets.Add(collision.gameObject);
             if (Target == null)
             {
-                Target = GetClosestTarget();
+                Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
             }
         }
     }
@@ -76,71 +84,23 @@ public class EnemyBehaviour : MonoBehaviour
             PossibleTargets.Remove(collision.gameObject);
             if (Target == collision.gameObject)
             {
-                Target = GetClosestTarget();
+                Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
             }
         }
     }
 
-    private GameObject GetClosestTarget()
-    {
-        FilterActiveTargets();
-        GameObject closest = null;
-        float closestDistance = 999;
-        for (int i = 0; i < PossibleTargets.Count; i++)
-        {
-            if (Vector2.Distance(PossibleTargets[i].gameObject.transform.position, gameObject.transform.position) < closestDistance)
-            {
-                closest = PossibleTargets[i];
-                closestDistance = Vector2.Distance(PossibleTargets[i].gameObject.transform.position, gameObject.transform.position);
-            }
-        }
-        return closest;
-    }
 
-    private void FilterActiveTargets()
-    {
-        for (int i = 0; i < PossibleTargets.Count; i++)
-        {
-            switch (PossibleTargets[i].tag)
-            {
-                case "Player":
-                    if (!PossibleTargets[i].GetComponent<PlayerLife>().enabled)
-                    {
-                        PossibleTargets.RemoveAt(i);
-                    }
-                    break;
-                case "Nexus":
-                    if (!PossibleTargets[i].GetComponent<NexusManager>().enabled)
-                    {
-                        PossibleTargets.RemoveAt(i);
-                    }
-                    break;
-                case "Turret":
-                    if (!PossibleTargets[i].GetComponent<BuildingProperties>().enabled)
-                    {
-                        PossibleTargets.RemoveAt(i);
-                    }
-                    break;
-                case "Barrier":
-                    if (!PossibleTargets[i].GetComponent<BuildingProperties>().enabled)
-                    {
-                        PossibleTargets.RemoveAt(i);
-                    }
-                    break;
-            }
-        }
-    }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         if (PhotonNetwork.isMasterClient)
         {
-            HandleAI();
+            StateMachine();
         }
         UpdateHealthBar();
     }
-    
+
     void Follow()
     {
         if (DistanceToTarget() < 10)
@@ -168,7 +128,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (Time.time > nextTargetChange)
         {
             nextTargetChange += 3f;
-            Target = GetClosestTarget();
+            Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
         }
 
         if (Target != null)
@@ -199,7 +159,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     void attack()
     {
-        if(Time.time > nextAtk)
+        if (Time.time > nextAtk)
         {
             nextAtk = Time.time + attackSpeed;
 
@@ -297,4 +257,116 @@ public class EnemyBehaviour : MonoBehaviour
             UpdateHealthBar();
         }
     }
+
+
+    public void StateMachine()
+    {
+        switch (status)
+        {
+
+            case (mode)0: idle(); break;
+            case (mode)1: roam(); break;
+            case (mode)2: approach(); break;
+            case (mode)3: attack(); break;
+
+
+
+
+        }
+
+
+    }
+
+
+    void idle()
+    {
+        idleTarget = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
+        status = mode.roaming;
+
+
+    }
+
+    void roam()
+    {
+        this.transform.position = Vector2.MoveTowards(this.transform.position, idleTarget, movementSpeed * Time.deltaTime);
+
+        aggroRange.GetContacts(colliders);
+        if (colliders[0] != null)
+        {
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i] == null)
+                    break;
+
+                else if (colliders[i].transform.gameObject.tag == "Player" || colliders[i].transform.gameObject.tag == "Buildings")
+                {
+                    Target = colliders[i].transform.gameObject;
+                    status = mode.approaching;
+
+                    return;
+                }
+
+                else if (colliders[i].transform.gameObject.tag == "wall")
+                {
+                    Debug.Log("bati na parede");
+                    colliders = new Collider2D[10];
+                    status = mode.idle;
+                    return;
+                }
+            }
+        }
+
+
+        if (transform.position.AlmostEquals(idleTarget, movementSpeed))
+        {
+            status = mode.idle;
+        }
+
+    }
+
+    void approach()
+    {
+        if (Vector2.Distance(transform.position, Target.transform.position) > 3)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, Target.transform.position, movementSpeed * Time.deltaTime);
+
+            aggroRange.GetContacts(colliders);
+            if (colliders[0] != null)
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i] == null)
+                        break;
+
+                    else if (colliders[i].transform.gameObject.tag == "wall")
+                    {
+                        Debug.Log("bati na parede");
+                        colliders = new Collider2D[10];
+                        status = mode.idle;
+                        Target = null;
+                        return;
+                    }
+                }
+            }
+
+            else
+            {
+                status = mode.attacking;
+            }
+        }
+    }
+
+
+    void attacking()
+    {
+        if (Time.time > nextAtk)
+        {
+            nextAtk = Time.time;
+            //fun;'ao de ataque
+
+            Debug.Log("Ataquei sim");
+        }
+    }
+
+
 }

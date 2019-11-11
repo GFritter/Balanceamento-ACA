@@ -1029,8 +1029,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9728
   aimObjectSpread: {fileID: 7874595957269989418}
-  fireRate: 0.9
-  bullet_Damage: 4
+  fireRate: 0.7
+  bullet_Damage: 9
   bullet_Knockback: 800
 --- !u!114 &1604420148007959575
 MonoBehaviour:
@@ -1044,7 +1044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95f92a83956cd7f4bb3f06521dce17e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement_speed: 7
+  movement_speed: 8
   photon_View: {fileID: 1612562780714233409}
   playerCamera: {fileID: 6620604615041004896}
 --- !u!114 &2750536215997999009

@@ -466,14 +466,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88f0179aaffdd3848a94bd720a6e5b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 75
-  health: 75
+  maxHealth: 32
+  health: 32
   healthBar: {fileID: 529032153166534177}
   attackSpeed: 0
-  aggroRange: {fileID: 0}
+  aggroRange: {fileID: 6443419421966654549}
   damageAmount: 5
   colliders: []
   idleTarget: {x: 0, y: 0}
+  status: 0
+  behaviour: {fileID: 11400000, guid: 50c467e6bb64f8c43a1e61d1ee871723, type: 2}
 --- !u!1 &1827999891693161418
 GameObject:
   m_ObjectHideFlags: 0

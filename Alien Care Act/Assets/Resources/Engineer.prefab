@@ -696,7 +696,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 9728
-  fireRate: 0.2
+  fireRate: 1.2
   bullet_Damage: 25
   bullet_Knockback: 150
   aimObjectSpread: {fileID: 4912374135468383513}
