@@ -100,8 +100,15 @@ public class EngineerConstruction : MonoBehaviour
         if (eManager.BuyBuilding(construction.GetComponent<BuildingProperties>().GetValue()))
         {
             whereToBuild.tag = construction.tag;
+            Debug.Log("####################################################");
             Debug.Log("TO CONSTRUINDO ESSA MERDA");
-            PhotonNetwork.Instantiate(construction.name, whereToBuild.transform.position, whereToBuild.transform.rotation, 0);
+            Debug.Log(construction.name);
+            Debug.Log(whereToBuild.tag);
+            Debug.Log(whereToBuild.transform.position);
+
+
+            Debug.Log("####################################################");
+            CallCreateBuilding(construction.name, whereToBuild.transform);
         }
     }
 
@@ -150,16 +157,36 @@ public class EngineerConstruction : MonoBehaviour
                 {
                     if (c.tag != "Buildable")
                     {
-                        Debug.Log("Can't Build Here");
+                       // Debug.Log("Can't Build Here");
                     }
                     else
                     {
-                        Debug.Log(c.tag);
+                       // Debug.Log(c.tag);
                         Construction(c.gameObject, selectedConstruction);
                     }
                 }
             }
         }
     }
+
+    public void CallCreateBuilding(string name, Transform t)
+    {
+        pView.RPC("RPC_CreateBuilding", PhotonTargets.All, name, t);
+    }
+
+    [PunRPC]
+    public void RPC_CreateBuilding(string name, Transform t)
+    {
+        CreateBuilding(name, t);
+    }
+
+    public void CreateBuilding(string name, Transform t)
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            PhotonNetwork.Instantiate(name, t.position, t.rotation, 0);
+        }
+    }
+
 
 }

@@ -42,6 +42,7 @@ public class photonHandler : MonoBehaviour
     {
         if (pButton.playerName.text.Length >= 3)
         {
+            PhotonNetwork.player.NickName = pButton.playerName.text;
             if (pButton.hostGame.text.Length >= 1)
             {
                 PhotonNetwork.CreateRoom(pButton.hostGame.text, new RoomOptions() { MaxPlayers = 2 }, null);
@@ -273,10 +274,15 @@ public class photonHandler : MonoBehaviour
         photonView.RPC("DestroyGameObject", PhotonTargets.All, go);
     }
 
+   
+
     [PunRPC]
     public void DestroyGameObject(GameObject go)
     {
         Destroy(go);
     }
+
+   
+   
 
 }

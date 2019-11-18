@@ -20,10 +20,13 @@ public class Tumor : MonoBehaviour
     void Update()
     {
         if (Time.time > SpawnTime && enemyMgr.CanAddEnemy())
-        {   
+        {
             //SpawnRate por contagem total de tumores
-            SpawnRate = (transform.parent.childCount * 0.4f);
-            SpawnTime = Time.time + SpawnRate;
+            if (transform.parent.childCount > 0)
+            {
+                SpawnRate = (transform.parent.childCount * 0.4f);
+                SpawnTime = Time.time + SpawnRate;
+            }
             //Spawn a random possible enemy
             SpawnEnemy(PossibleSpawns[Random.Range(0, PossibleSpawns.Count - 1)]);
         }

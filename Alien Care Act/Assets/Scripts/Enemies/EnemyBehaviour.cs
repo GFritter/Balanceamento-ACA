@@ -298,7 +298,7 @@ public class EnemyBehaviour : MonoBehaviour
                 if (colliders[i] == null)
                     break;
 
-                else if (colliders[i].transform.gameObject.tag == "Player" || colliders[i].transform.gameObject.tag == "Buildings")
+                else if (colliders[i].transform.gameObject.tag == "Player" || colliders[i].transform.gameObject.tag == "Turret" || colliders[i].transform.gameObject.tag == "Barrier")
                 {
                     Target = colliders[i].transform.gameObject;
                     status = mode.approaching;
@@ -326,7 +326,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     void approach()
     {
-        if (Vector2.Distance(transform.position, Target.transform.position) > 3)
+        if (Target != null && Vector2.Distance(transform.position, Target.transform.position) > 3)
         {
             transform.position = Vector2.MoveTowards(transform.position, Target.transform.position, movementSpeed * Time.deltaTime);
 
@@ -349,9 +349,14 @@ public class EnemyBehaviour : MonoBehaviour
                 }
             }
 
-            else
+            else if (Target)
             {
                 status = mode.attacking;
+            }
+
+            else
+            {
+                status = mode.roaming;
             }
         }
     }
@@ -362,9 +367,10 @@ public class EnemyBehaviour : MonoBehaviour
         if (Time.time > nextAtk)
         {
             nextAtk = Time.time;
-            //fun;'ao de ataque
 
-            Debug.Log("Ataquei sim");
+            applyDamage(Target);
+
+            //Debug.Log("Ataquei sim");
         }
     }
 

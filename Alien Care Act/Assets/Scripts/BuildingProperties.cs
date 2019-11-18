@@ -128,10 +128,12 @@ public class BuildingProperties : MonoBehaviour
             if (stream.isWriting)
             {
                 stream.SendNext(health);
+                Debug.Log("enviando vida");
             }
         }
         else
         {
+            Debug.Log("recebendo vida");
             health = (float)stream.ReceiveNext();
             UpdateHealthBar();
         }
