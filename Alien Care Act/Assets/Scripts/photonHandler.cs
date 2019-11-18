@@ -282,7 +282,25 @@ public class photonHandler : MonoBehaviour
         Destroy(go);
     }
 
-   
-   
+
+    public void CallCreateBuilding(string name, Vector3 pos, Quaternion rot)
+    {
+        photonView.RPC("RPC_CreateBuilding", PhotonTargets.All, name,pos,rot);
+    }
+
+    [PunRPC]
+    public void RPC_CreateBuilding(string name, Vector3 pos,Quaternion rot)
+    {
+        CreateBuilding(name, pos, rot);
+    }
+
+    public void CreateBuilding(string name, Vector3 pos, Quaternion rot)
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            PhotonNetwork.Instantiate(name, pos, rot, 0);
+        }
+    }
+
 
 }

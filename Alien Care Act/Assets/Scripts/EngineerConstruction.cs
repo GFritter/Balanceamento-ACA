@@ -9,7 +9,7 @@ public class EngineerConstruction : MonoBehaviour
     public PhotonView pView;
 
     public GameObject cPanel;
-
+    private photonHandler pHandler;
     public GameObject selectedConstruction;
     private int constructionSelection = 0;
 
@@ -31,7 +31,9 @@ public class EngineerConstruction : MonoBehaviour
     {
         cPanel = GameObject.Find("Canvas").transform.Find("ConstructionPanel").gameObject;
         eManager = GameObject.Find("LevelManager").GetComponent<EconomyManager>();
+        pHandler = GameObject.Find("photonDontDestroy").GetComponent<photonHandler>();
         UpdateConstructions();
+
     }
 
     // Update is called once per frame
@@ -86,10 +88,10 @@ public class EngineerConstruction : MonoBehaviour
                     UpdateConstructions();
                 }
             }
-            
+
         }
     }
-    
+
     void UpdateConstructions()
     {
         selectedConstruction = possibleConstructions[constructionSelection];
@@ -100,6 +102,8 @@ public class EngineerConstruction : MonoBehaviour
         if (eManager.BuyBuilding(construction.GetComponent<BuildingProperties>().GetValue()))
         {
             whereToBuild.tag = construction.tag;
+            construction.transform.position = whereToBuild.transform.position;
+            construction.transform.rotation = whereToBuild.transform.rotation;
             Debug.Log("####################################################");
             Debug.Log("TO CONSTRUINDO ESSA MERDA");
             Debug.Log(construction.name);
@@ -108,7 +112,7 @@ public class EngineerConstruction : MonoBehaviour
 
 
             Debug.Log("####################################################");
-            CallCreateBuilding(construction.name, whereToBuild.transform);
+            pHandler.CallCreateBuilding(construction.name, whereToBuild.transform.position, whereToBuild.transform.rotation);
         }
     }
 
@@ -125,17 +129,17 @@ public class EngineerConstruction : MonoBehaviour
         {
             foreach (Collider2D c in col)
             {
-                if (c.tag == "Buildable" && eManager.GetScraps()<= selectedConstruction.GetComponent<BuildingProperties>().GetValue())
+                if (c.tag == "Buildable" && eManager.GetScraps() <= selectedConstruction.GetComponent<BuildingProperties>().GetValue())
                 {
                     buildablePlaceIndicator.GetComponent<SpriteRenderer>().color = Color.red;
                     buildablePlaceIndicator.transform.position = c.gameObject.transform.position;
                 }
-                else if(c.tag=="Buildable")
+                else if (c.tag == "Buildable")
                 {
                     buildablePlaceIndicator.GetComponent<SpriteRenderer>().color = Color.green;
                     buildablePlaceIndicator.transform.position = c.gameObject.transform.position;
                 }
-                
+
             }
         }
     }
@@ -157,11 +161,11 @@ public class EngineerConstruction : MonoBehaviour
                 {
                     if (c.tag != "Buildable")
                     {
-                       // Debug.Log("Can't Build Here");
+                        // Debug.Log("Can't Build Here");
                     }
                     else
                     {
-                       // Debug.Log(c.tag);
+                        // Debug.Log(c.tag);
                         Construction(c.gameObject, selectedConstruction);
                     }
                 }
@@ -169,24 +173,6 @@ public class EngineerConstruction : MonoBehaviour
         }
     }
 
-    public void CallCreateBuilding(string name, Transform t)
-    {
-        pView.RPC("RPC_CreateBuilding", PhotonTargets.All, name, t);
-    }
-
-    [PunRPC]
-    public void RPC_CreateBuilding(string name, Transform t)
-    {
-        CreateBuilding(name, t);
-    }
-
-    public void CreateBuilding(string name, Transform t)
-    {
-        if (PhotonNetwork.isMasterClient)
-        {
-            PhotonNetwork.Instantiate(name, t.position, t.rotation, 0);
-        }
-    }
 
 
 }
