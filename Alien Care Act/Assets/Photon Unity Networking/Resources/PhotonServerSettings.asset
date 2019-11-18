@@ -60,4 +60,5 @@ MonoBehaviour:
   - Repair
   - ShootAtTarget
   - CallEndGame
+  - RPC_CreateBuilding
   DisableAutoOpenWizard: 1

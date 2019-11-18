@@ -65,6 +65,7 @@ public class EnemyBehaviour : MonoBehaviour
         status = mode.idle;
     }
 
+    //talvez excluir
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Turret" || collision.gameObject.tag == "Barrier" || collision.gameObject.tag == "Nexus")
@@ -72,11 +73,12 @@ public class EnemyBehaviour : MonoBehaviour
             PossibleTargets.Add(collision.gameObject);
             if (Target == null)
             {
-                Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
+               // Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
             }
         }
     }
 
+    //tavlez excluir
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Turret" || collision.gameObject.tag == "Barrier" || collision.gameObject.tag == "Nexus")
@@ -84,7 +86,7 @@ public class EnemyBehaviour : MonoBehaviour
             PossibleTargets.Remove(collision.gameObject);
             if (Target == collision.gameObject)
             {
-                Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
+              //  Target = behaviour.behaviour_GetPreferredTarget(PossibleTargets);
             }
         }
     }
@@ -135,7 +137,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             if (DistanceToTarget() < 3)
             {
-                attack();
+                attacking();
             }
             else if (DistanceToTarget() < 10)
             {
@@ -157,15 +159,6 @@ public class EnemyBehaviour : MonoBehaviour
         return Vector3.Distance(transform.position, Target.transform.position);
     }
 
-    void attack()
-    {
-        if (Time.time > nextAtk)
-        {
-            nextAtk = Time.time + attackSpeed;
-
-            applyDamage(Target);
-        }
-    }
 
     void applyDamage(GameObject target)
     {
@@ -267,7 +260,7 @@ public class EnemyBehaviour : MonoBehaviour
             case (mode)0: idle(); break;
             case (mode)1: roam(); break;
             case (mode)2: approach(); break;
-            case (mode)3: attack(); break;
+            case (mode)3: attacking(); break;
 
 
 
@@ -300,6 +293,7 @@ public class EnemyBehaviour : MonoBehaviour
 
                 else if (colliders[i].transform.gameObject.tag == "Player" || colliders[i].transform.gameObject.tag == "Turret" || colliders[i].transform.gameObject.tag == "Barrier")
                 {
+                    //botar o preffered no behaviour aqui
                     Target = colliders[i].transform.gameObject;
                     status = mode.approaching;
 
@@ -366,7 +360,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         if (Time.time > nextAtk)
         {
-            nextAtk = Time.time;
+            nextAtk = Time.time + attackSpeed;
 
             applyDamage(Target);
 
